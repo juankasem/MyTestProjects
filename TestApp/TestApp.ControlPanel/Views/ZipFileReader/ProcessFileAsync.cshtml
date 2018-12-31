@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "ReadZipFile";
+    Layout = null;
+}
+
+<h2>Upload Zip File</h2>
+<div class="row">
+    <div class="col-md-4">
+        @Html.BeginForm("ProcessFileAsync", "ZipFileReader", FormMethod.Post, new { enctype = "multipart/form-data" })
+        {
+
+        <div class="form-group">
+            <label class="control-label">Select File</label>
+            <input id="zipFile" name="files" type="file" multiple onchange="uploadFiles();" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Username</label>
+            <input type="text" name="username" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Password</label>
+            <input type="text" name="password" />
+        </div>
+
+        <input type="submit" value="Upload File" />
+        }
+    </div>
+</div>
+<script src="~/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function uploadFiles() {
+            let inputFile = $('#zipFile');
+            let files = inputFile.files;
+            let formData = new FormData();
+            for (var i = 0; i < length; i++)
+            {
+                formData.append("files", files[i]);
+            }
+
+            $.ajax({
+                method: 'POST',
+                url: '/ZipFileRead/ProcessFileAsync',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    //$('body').append($('<div>').append($('span').text('File(s) uploaded successfully!')));
+                    alert('File(s) uploaded successfully!');
+                }
+            });       
+        });
+</script>
