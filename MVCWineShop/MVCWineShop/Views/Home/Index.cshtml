@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+<style>
+    .glyphicon{
+        font-size:4em;
+    }
+</style>
+<div class="row text-center">
+    <h1 style="font-size:4em;"> Classy Wines</h1><hr />
+    <p class="text-muted">Come Check out our catalog of fine wines </p>
+    <a asp-action="Shop" asp-controller="Wines"class="btn btn-primary btn-lg"> Browse our catalogue.</a>
+</div>
+
+<div class="container-fluid">
+    <section id="About">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <span class="glyphicon glyphicon-ok text-primary"></span>
+                <h3>Exclusive Wines</h3>
+                <p class="text-muted">We offer only exclusive wines.</p>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <span class="glyphicon glyphicon-plane text-primary"></span>
+                <h3>Ready to Ship</h3>
+                <p class="text-muted">We ship all over the world.</p>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <span class="glyphicon glyphicon-phone text-primary"></span>
+                <h3>Mobile Friendly</h3>
+                <p class="text-muted">Responsive design for mobile devices.</p>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <span class="glyphicon glyphicon-heart text-primary"></span>
+                <h3>Made With Love</h3>
+                <p class="text-muted">..And grapes...mosty grapes</p>
+            </div>
+       </div>
+    </section>
+     <section id="portfolio">
+          Html.PartialAsync("_IndexPartial") 
+     </section>
+
+    <section id="contact">
+        <div class="row">
+            <div class="col-md-8 text-center">
+                <h2 class="section-heading"> Let's get in touch!</h2>
+                <hr />
+                <p>Give us a call and order some of our beverages already!</p>
+            </div>
+        </div>
+    </section>
+</div>

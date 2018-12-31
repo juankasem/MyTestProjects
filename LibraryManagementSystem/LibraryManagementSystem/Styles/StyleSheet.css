@@ -1,0 +1,45 @@
+﻿body {
+}
+.TextFields {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size:14px;
+}
+
+    .inputs:focus {
+        background: #FFF;
+        -webkit-box-shadow: 0 0 25px #CCC;
+        -moz-box-shadow: 0 0 25px #ccc;
+        box-shadow: 0 0 25px #CCC;
+    }
+
+.labels {
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-size:14px; 
+    font-weight:bold;
+}
+
+h2{
+    color:maroon;
+    font-size:16px;
+    font-weight:600;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+.validators {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: red;
+}
+
+.bookDetailsImage {
+    width: 400px;
+    height: 400px;
+    margin-right: 20px;
+}
+.gridViewHeader{
+    color:black;
+    font-family: Candara;
+    font-size: 16px;
+    font-weight:bold;
+    text-align:center;
+    vertical-align:middle;
+    text-wrap:none;
+}
