@@ -1,0 +1,327 @@
+﻿@model EyeTestABB.Data.ViewModels.ContactViewModel
+
+@{
+    ViewData["Title"] = "AddContact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="col-md-offset-4">Add Contact Form</h3>
+<hr />
+<form id="contact" asp-controller="Contact" asp-action="AddContact" method="post" enctype="multipart/form-data">
+    <div class="row orderForm">
+        <div class="form-horizontal">
+            <h4>New Contact Details</h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="col-md-4" id="divForm">
+                <div class="form-group ">
+                    @*<label asp-for="FirstName" class="control-label"></label>*@
+                    <input asp-for="FirstName" id="contact_FirstName" name="FirstName"  class="form-control required" placeholder="First Name"  />
+                    <span asp-validation-for="FirstName" class="text-danger error">First Name is required</span>
+                </div>
+                <div class="form-group">
+                    @*<label asp-for="LastName" class="control-label"></label>*@
+                    <input asp-for="LastName" id="contact_LastName" name="LastName" class="form-control" placeholder="Last Name"  />
+                    <span asp-validation-for="LastName" class="text-danger error"></span>
+                </div>
+                <div class="form-group">
+                    <div class="form-group col-md-11">
+                        <input asp-for="ContactNumber1" id="contact_ContactNumber1" name="ContactNumber1" class="form-control phone required" placeholder="Contact Number1"  />
+                        <span asp-validation-for="ContactNumber1" class="text-danger error">A valid contact number is required</span>
+                    </div>
+                    <div class="form-group col-md-1 add-contact-btn">
+                        <button class="btn btn-sm "><i class="fa fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <div class="form-group div-hidden">
+                    <div class="form-group col-md-11">
+                        <input asp-for="ContactNumber2" id="contact_ContactNumber2" name="ContactNumber2" class="form-control phone" placeholder="Contact Number2" autocomplete="off" />
+                        <span asp-validation-for="ContactNumber2" class="text-danger error"></span>
+                    </div>
+                    <div class="form-group col-md-1 add-contact-btn">
+                        <button class="btn btn-sm add-contact-btn"><i class="fa fa-plus"></i>Add</button>
+                    </div>
+                </div>
+                <div class="form-group div-hidden">
+                    <div class="form-group col-md-11">
+                        <input asp-for="ContactNumber3" id="contact_ContactNumber3" name="ContactNumber3" class="form-control phone" placeholder="Contact Number3" autocomplete="off" />
+                        <span asp-validation-for="ContactNumber3" class="text-danger error"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input asp-for="CompanyName" id="contact_CompanyName" name="CompanyName" class="form-control notrequired" placeholder="Company" />
+                    <span asp-validation-for="CompanyName" class="text-danger error"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="EmailID" id="contact_EmailID" name="EmailID" class="form-control email" placeholder="Email ID" />
+                    <span asp-validation-for="EmailID" class="text-danger error"></span>
+                </div>
+                <div id="contact_submit" class="form-group">
+                    <button type="submit" value="Create" class="btn btn-primary">Create </button>|
+                    <a class="index-list" asp-action="List">Back to Contact List</a>
+                </div>
+            </div>
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <select asp-for="CountryID" asp-items="@Model.CountryList" id="contact_CountryID" name="CountryID" class="form-control required">
+                        <option value=""> Select a Country please</option>
+                    </select>
+                    <span asp-validation-for="CountryID" class="text-danger error">Select a Country please</span>
+                </div>
+
+                <div class="form-group">
+                    <select asp-for="StateID" asp-items="@Model.StateList" id="contact_StateID" name="StateID" class="form-control required">
+                        <option>Select a State please</option>
+                    </select>
+                    <span asp-validation-for="StateID" class="text-danger error">Select a State please</span>
+                </div>
+                <div class="form-group">
+                    <textarea asp-for="HomeAddress" id="contact_HomeAddress" name="HomeAddress" class="form-control" rows="5" placeholder="Home Address"></textarea>
+                    <span asp-validation-for="HomeAddress" class="text-danger error"></span>
+                </div>
+                <div class="form-group">
+                    <textarea asp-for="WorkAddress" id="contact_WorkAddress" name="WorkAddress" class="form-control" rows="5" placeholder="Work Address"></textarea>
+                    <span asp-validation-for="WorkAddress" class="text-danger error"></span>
+                </div>
+                <div class="form-group">
+                    @*<label asp-for="ImagePath" class="control-label"></label>*@
+                    @*<img src="@Url.Content(Model.ImagePath)" class="image" id="imagePreview" />*@
+                    <input type="file" asp-for="ImagePath" class="form-control notrequired" id="contact_ImagePath" name="ImagePath"
+                           accept="image/x-png, image/gif, image/jpeg, image/jpg" />
+                    <span asp-validation-for="ImagePath" class="text-danger error"></span>
+                    @*onchange="ShowImagePreview(this, document.getElementById('imagePreview'))"*@
+                </div>
+                <div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/agencyTemplate/js/agency.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // First Name can't be blank
+            $('#contact_FirstName').focusout(function () {
+                var input = $(this);
+                var is_name = input.val();
+                if (is_name) {
+                    input.removeClass('invalid').addClass('valid');
+                    input.siblings('span').addClass('error');
+                }
+                else {
+                    input.removeClass('valid').addClass('invalid');
+                    input.siblings('span').removeClass('error');
+                }
+            });
+
+            $('.phone').keydown(function (event) {
+                var phone = $(this);
+                // Allow only space, plus, backspace, and delete
+                if (event.keyCode == 32 || event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 187) {
+                }
+                else {
+                    // Ensure that it is a number and stop the keypress
+                    if (event.keyCode < 48 || event.keyCode > 57) {
+                        event.preventDefault();
+                        phone.siblings('span').html('Numeric values only').removeClass('error');
+                    }
+                }
+            });
+
+            // phone must be a valid phone number
+            $('#contact_ContactNumber1').focusout(function () {
+                var input = $(this);
+                var phoneRegExp = /[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/;
+                var is_phone = phoneRegExp.test(input.val());
+                if (is_phone) {
+                    input.removeClass('invalid').addClass('valid');
+                    input.siblings('span').addClass('error');
+                }
+                else {
+                    input.siblings('span').html('A valid contact number is required').removeClass('error');
+                    input.removeClass('valid').addClass('invalid');
+                    input.siblings('span').removeClass('error');
+                }
+            });
+
+            // Email must be a valid email
+            $('#contact_EmailID').focusout(function () {
+                var input = $(this);
+                var emailRegExp = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                var is_email = emailRegExp.test(input.val());
+                if (is_email || ! input.val()) {
+                    input.removeClass('invalid').addClass('valid');
+                    input.siblings('span').addClass('error');
+                }
+                else {
+                    input.removeClass('valid').addClass('invalid');
+                    input.siblings('span').html('A valid email address is required'); 
+                    input.siblings('span').removeClass('error');
+                }
+            });
+
+            $('#contact_CountryID').click(function () {
+                var input = $(this);
+                var is_country = input.val();
+                if (is_country) {
+                    input.removeClass('invalid').addClass('valid');
+                    input.siblings('span').addClass('error');
+                }
+                else {
+                    input.removeClass('valid').addClass('invalid');
+                    input.siblings('span').removeClass('error');
+                }
+            });
+
+            $('#contact_StateID').click(function () {
+                var input = $(this);
+                var is_state = input.val();
+                if (is_state) {
+                    input.removeClass('invalid').addClass('valid');
+                    input.siblings('span').addClass('error');
+                }
+                else {
+                    input.removeClass('valid').addClass('invalid');
+                    input.siblings('span').removeClass('error');
+                }
+            });
+
+            $('#contact_CountryID').change(function () {
+                var countryID = parseInt($(this).val());
+                if (!isNaN(countryID)) {
+                    $stateList = $('#contact_StateID');
+                    $stateList.empty(); //Clear all States
+
+                    $.ajax({
+                        url: '@Url.Action("BindStates","Contact")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { countryId: countryID },
+
+                        success: function (states) {
+                            $stateList.empty(); //Clear all States
+                            $stateList.append($("<option></option>").val('').html('Select a State please'));
+
+                            $.each(states, function (i, item) { //Iterate over the returned data to populate Select List item
+                                $stateList.append('<option value="' + item.id + '"> ' + item.name + '</option>');
+                            });
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+            });
+
+            $(':not(.required,.email)').focusout(function () {
+                var input = $(this);
+                    input.removeClass('invalid').addClass('valid');
+            });
+
+            $('input').keypress(function () {
+                var input = $(this);
+                input.siblings('span').addClass('error');
+            });
+
+        //After form submitted validation
+            $('#contact_submit button').click(function (event) {
+            var form_data = $('#contact').serializeArray();
+            var error_free = true;
+            for (var input in form_data) {
+                var element = $('#contact_' + form_data[input]['name']);
+                if (element.hasClass('valid') || !element.hasClass('required'))              
+                    var valid = true;
+                else 
+                    var valid = false;
+                var error_element = $('span', element.parent());
+                if (!valid) {
+                    error_element.removeClass('error').addClass('error_show');
+
+                    if (element.hasClass('required'))
+                    element.removeClass('valid').addClass('invalid');
+
+                    error_free = false;
+                }
+            }
+            if (!error_free) {
+                event.preventDefault();
+            }
+        });
+
+           
+            //$('.form-control').keypress(function () {
+            //    $(this).siblings('.error').hide();
+            //});
+
+            //$('.form-control').focusout(function () {
+            //    if ($(this).hasClass('phone')) {
+            //        $phoneNum = $(this).val();
+            //        $(this).siblings('.error').html('');
+
+            //        var phoneRegExp = /[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/;
+
+            //        if (!phoneRegExp.test($phoneNum) && $(this).hasClass('required')) {
+            //            $(this).siblings('.error').html('Enter a valid phone Number please').toggle();
+            //            ChangeBorderToRed($(this));
+            //        }
+            //        else
+            //        ChangeBorderToGreen($(this));
+            //    }
+            //    else if ($(this).hasClass('email')) {
+            //        $email = $(this).val();
+            //        $(this).siblings(".error").html('');
+            //        var emailRegExp = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            //        if (!emailRegExp.test($email)) {
+            //            $(this).siblings('.error').html('Not a valid Email').toggle();
+            //            ChangeBorderToRed($(this));
+            //        }
+            //        else
+            //            ChangeBorderToGreen($(this));
+            //    }
+            //    else if ($(this).val() === "" && $(this).hasClass('required')) {
+            //        $(this).siblings('.error').show();
+            //        ChangeBorderToRed($(this));
+            //    }
+            //    else {
+            //        $(this).siblings(".error").hide();
+            //        if ($(this).hasClass('required') || $(this).val() !== "")
+            //        ChangeBorderToGreen($(this));
+            //    }
+            //})
+
+            $('.add-contact-btn').click(function (evt) {
+                evt.preventDefault();
+                var addNumberBtn = $(this);
+                if (addNumberBtn.prev('.form-group').find('.phone').val()) {
+                    addNumberBtn.prop('hidden', true);
+                    addNumberBtn.parent().next('.form-group').removeClass('div-hidden');
+                    addNumberBtn.prev().children('input').removeClass('invalid').addClass('valid');
+                    addNumberBtn.prev().children('span').addClass('error');
+                }
+                else {
+                    addNumberBtn.prev().children('input').removeClass('valid').addClass('invalid');
+                    addNumberBtn.prev().children('span').html('Enter a contact number please').removeClass('error');
+                }
+            });
+
+            //$('#divForm').on('click', '.contact-add-btn', function (evt) {
+            //    evt.preventDefault();
+            //    var newDiv = $('<div class="form-group"> <label asp-for="ContactNumber2" class="control-label">contact 3</label><input asp-for="ContactNumber2" class="form-control phone" autocomplete="off" placeholder="Contact Number2" /><button class="btn btn-sm col-3 contact-add-btn"><i class="fa fa-plus"></i>Add</button><button  class="btn btn-sm col-3 contact-remove-btn"><i class="fa fa-minus"></i>Remove</button>  <span asp-validation-for="ContactNumber2" class="text-danger"></span></div>');
+            //    $(newDiv).insertAfter($(this).parent());
+            //    $(this).prop('disabled', true);
+            //});
+
+            //$('#divForm').on('click', '.contact-remove-btn', function (evt) {
+            //    evt.preventDefault();
+            //    $(this).parent().prev().children('.contact-add-btn').prop('disabled', false);
+            //    $(this).prop('disabled', true);
+            //    $(this).parent().remove();
+            //});
+        });
+    </script>
+}

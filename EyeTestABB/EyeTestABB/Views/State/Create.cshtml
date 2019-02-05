@@ -1,0 +1,98 @@
+﻿@model EyeTestABB.Data.ViewModels.StateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2 class="col-md-offset-4">Add State Form</h2>
+
+<hr />
+<div class="row orderForm">
+    <div class="col-md-4">
+        <form id="state" asp-action="Create">
+            <h4>New State Details</h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                @*<label asp-for="CountryId" class="control-label"></label>*@
+                <select asp-for="CountryId" id="state_CountryId" name="CountryId" asp-items="@Model.CountryList" class="form-control">
+                    <option>Select a Country please</option>
+                </select>
+                <span asp-validation-for="CountryId" class="text-danger error">Select a Country please</span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Name" class="control-label"></label>*@
+                <input asp-for="Name" id="state_Name" name="Name" class="form-control" placeholder="State Name" autocomplete="off" />
+                <span asp-validation-for="Name" class="text-danger error">A State name is reqired</span>
+            </div>
+            <div id="state_submit" class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button> |
+                <a class="index-list" asp-action="Index">Back to State List</a>
+
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/agencyTemplate/js/agency.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // state Name can't be blank
+            $('#state_Name').focusout(function () {
+                var input = $(this);
+                var is_name = input.val();
+                if (is_name) {
+                    input.removeClass('invalid').addClass('valid');
+                    input.siblings('span').addClass('error');
+                }
+                else {
+                    input.removeClass('valid').addClass('invalid');
+                    input.siblings('span').removeClass('error');
+                }
+            });
+
+            $('#state_CountryId').focusout(function () {
+                var input = $(this);
+                var is_name = input.val();
+                if (is_name) {
+                    input.removeClass('invalid').addClass('valid');
+                    input.siblings('span').addClass('error');
+                }
+                else {
+                    input.removeClass('valid').addClass('invalid');
+                    input.siblings('span').removeClass('error');
+                }
+            });
+
+            $('input').keypress(function () {
+                var input = $(this);
+                input.siblings('span').addClass('error');
+            })
+
+            //After form submitted validation
+            $('#state_submit button').click(function (event) {
+                var form = $('#state');
+                var form_data = form.serializeArray();
+                var error_free = true;
+                for (var input in form_data) {
+                    var element = $('#state_' + form_data[input]['name']);
+                    if (element.hasClass('valid'))
+                        var valid = true;
+                    var error_element = $('span', element.parent());
+                    if (!valid) {
+                        error_element.removeClass('error').addClass('error_show');
+                        element.addClass('invalid');
+                        error_free = false;
+                    }
+                    else { error_element.removeClass('error_show').addClass('error'); }
+                }
+                if (!error_free) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+}
+
+

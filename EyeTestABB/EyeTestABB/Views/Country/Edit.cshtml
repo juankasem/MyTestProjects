@@ -1,0 +1,81 @@
+﻿@model EyeTestABB.Data.ViewModels.CountryViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views//Shared/_Layout.cshtml";
+
+}
+
+<h2 class="col-md-offset-4">Edit Country</h2>
+
+<h4>Existing Country Details</h4>
+<hr />
+<div class="row orderForm">
+    <div class="col-md-4">
+        <form id="country" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                @*<label asp-for="Name" class="control-label"></label>*@
+                <input asp-for="Name" id="country_Name" name="Name" class="form-control" placeholder="Country Name" autocomplete="off" />
+                <span asp-validation-for="Name" class="text-danger error">A Country name is required</span>
+            </div>
+            <div id="country_submit" class="form-group">
+                <button type="submit" value="Save" class="btn btn-primary">Save </button>|
+                <a class="index-list" asp-action="Index">Back to Country List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/agencyTemplate/js/agency.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Country Name can't be blank
+            $('#country_Name').focusout(function () {
+                var input = $(this);
+                var is_name = input.val();
+                if (is_name) {
+                    input.removeClass('invalid').addClass('valid');
+                    input.siblings('span').addClass('error');
+                }
+                else {
+                    input.removeClass('valid').addClass('invalid');
+                    input.siblings('span').removeClass('error');
+                }
+            });
+
+            $('input').keypress(function () {
+                var input = $(this);
+                input.siblings('span').addClass('error');
+            })
+
+            //After form submitted validation
+            $('#country_submit button').click(function (event) {
+                var form = $('#country');
+                var form_data = form.serializeArray();
+                var error_free = true;
+                for (var input in form_data) {
+                    var element = $('#country_' + form_data[input]['name']);
+                    if (element.hasClass('valid'))
+                        var valid = true;
+                    var error_element = $('span', element.parent());
+                    if (!valid) {
+                        error_element.removeClass('error').addClass('error_show');
+                        element.addClass('invalid');
+                        error_free = false;
+                        alert('There are errors: Form will not be submitted');
+
+                    }
+                    else { error_element.removeClass('error_show').addClass('error'); }
+                }
+                if (!error_free) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+}

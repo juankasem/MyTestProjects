@@ -1,0 +1,100 @@
+﻿@model IEnumerable<EyeTestABB.Data.ViewModels.StateListViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2 class="col-md-offset-4">List of States</h2>
+
+<p>
+    <a class="btn btn-success" asp-action="Create"><i class="fa fa-plus"></i> Create New</a>
+</p>
+<table class="table table-striped table-condensed table-margin">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="row_@item.Id">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country)
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">
+                     <i class="fa fa-pen"></i> Edit</a> |
+                    <a class="btn btn-danger btn-sm" onclick="ConfirmDelete(@item.Id,'@item.Name')">
+                     <i class="fa fa-trash"></i> Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="modal" id="delModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete State</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this State?</p>
+                <p class="name"></p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success" onclick="DeleteState()">Yes</a>
+                <a class="btn btn-danger" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="stateId" />
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/agencyTemplate/js/agency.min.js"></script>
+    <script>
+
+        var ConfirmDelete = function (stateId, stateName) {
+            $('#stateId').val(stateId);
+            $('#delModal').modal('show');
+            $('#delModal').find('.modal-body').children('.name').html(stateName);
+        }
+
+        var DeleteState = function () {
+
+            var stateId = $('#stateId').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete", "State")',
+                data: { id: stateId },
+                success: function (result) {
+                    if (result) {
+                        $('#delModal').modal('hide');
+                        $('#row_' + stateId).remove();
+                    }
+                    else {
+                        $('#delModal').find('.modal-body').children('p').html('state not found');
+                    }
+                }
+            });
+        }
+    </script>
+
+}
